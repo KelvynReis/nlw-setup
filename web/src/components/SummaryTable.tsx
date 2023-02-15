@@ -1,5 +1,8 @@
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning";
 import { HabitDay } from "./HabitDay";
+import { useQuery } from "react-query";
+import { handdleSummaryTable } from "../service";
+import dayjs from "dayjs";
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
 
@@ -10,6 +13,16 @@ const amountOfDaysToFill = minimunSummaryDatesSize;
 -summaryDates.length;
 
 export const SummaryTable = () => {
+  const { data, isLoading, isError } = useQuery("summary", handdleSummaryTable);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
   return (
     <div className="w-full flex">
       <div className="grid grid-rows-7 grid-flow-row gap-3">
@@ -27,11 +40,16 @@ export const SummaryTable = () => {
 
       <div className="grid grid-rows-7 grid-flow-col gap-3">
         {summaryDates.map((date) => {
+          const DayInSummary = data.find((day: any) => {
+            return dayjs(date).isSame(day.date, "day");
+          });
+
           return (
             <HabitDay
               key={date.toString()}
-              amount={5}
-              completed={Math.round(Math.random() * 5)}
+              date={date}
+              amount={DayInSummary?.amount}
+              defaultCompleted={DayInSummary?.completed}
             />
           );
         })}

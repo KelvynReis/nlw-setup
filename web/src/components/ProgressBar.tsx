@@ -1,21 +1,19 @@
-import React from "react";
-
 interface ProgressBarProps {
   progress: number;
 }
 
-export const ProgressBar = ({ progress }: ProgressBarProps) => {
+export function ProgressBar(props: ProgressBarProps) {
   return (
-    <div className="h-3 rounded-r-xl bg-zinc-700 w-full mt-4">
+    <div className="h-3 rounded-xl bg-zinc-700 w-full mt-4">
       <div
-        aria-label="Progresso de hábitos completados nesse dia"
         role="progressbar"
-        aria-valuenow={progress}
-        className="h-3 rounded-xl bg-violet-600"
+        aria-label="Progresso de hábitos completados nesse dia"
+        aria-valuenow={props.progress}
+        className="h-3 rounded-xl bg-violet-600 transition-all"
         style={{
-          width: `${progress}%`,
+          width: `${props.progress}%`,
         }}
       />
     </div>
   );
-};
+}
